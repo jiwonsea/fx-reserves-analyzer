@@ -1,0 +1,20 @@
+# 환경변수 (API 키 노출 방지)
+.env
+
+# 분석 출력물 (재현 가능하므로 제외)
+output/*.png
+output/*.xlsx
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
