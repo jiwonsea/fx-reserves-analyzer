@@ -51,7 +51,10 @@ def run_var(df: pd.DataFrame) -> dict:
 
     model = VAR(clean)
     lag_order = model.select_order(maxlags=config.VAR_MAX_LAG)
-    optimal_lag = max(1, lag_order.aic)
+    selected = lag_order.aic if lag_order.aic is not None else 0
+    optimal_lag = max(1, int(selected))
+    if selected != optimal_lag:
+        logger.warning("AIC 선택 lag=%s → 최소값 1로 조정", selected)
     logger.info("VAR 최적 lag (AIC): %d", optimal_lag)
 
     results = model.fit(optimal_lag)

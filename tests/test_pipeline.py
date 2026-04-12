@@ -25,26 +25,26 @@ def test_ecos_missing_key():
 # Test 2: FX 컬렉터 — 반환값이 PeriodIndex(freq='M') 인지 확인
 # --------------------------------------------------------------------------
 def test_fx_collector_period_index():
-    import pandas as pd
-    import yfinance as yf
+    # fx_collector는 ECOS API(requests.get)를 사용 — ECOS 응답 형식으로 mock
+    periods = pd.period_range("2022-01", "2023-12", freq="M")
+    fake_rows = [
+        {"TIME": str(p).replace("-", ""), "DATA_VALUE": str(1200 + i * 5)}
+        for i, p in enumerate(periods)
+    ]
+    fake_response = {"StatisticSearch": {"row": fake_rows}}
 
-    # 2년치 가짜 일별 데이터 생성
-    dates = pd.date_range("2022-01-01", "2023-12-31", freq="B")
-    fake_close = pd.Series(
-        np.random.uniform(1200, 1400, len(dates)), index=dates, name="Close"
-    )
-    # yfinance는 MultiIndex 컬럼 DataFrame 반환
-    fake_df = pd.DataFrame({"Close": fake_close.values}, index=dates)
-    fake_df.columns = pd.MultiIndex.from_tuples([("Close", "USDKRW=X")])
+    fake_resp_obj = mock.MagicMock()
+    fake_resp_obj.raise_for_status.return_value = None
+    fake_resp_obj.json.return_value = fake_response
 
-    with mock.patch("yfinance.download", return_value=fake_df):
+    with mock.patch("requests.get", return_value=fake_resp_obj):
         from pipeline.fx_collector import fetch_usdkrw
 
-        result = fetch_usdkrw(start="202201", end="202312")
+        result = fetch_usdkrw(api_key="TEST_KEY", start="202201", end="202312")
 
     assert isinstance(result.index, pd.PeriodIndex), "인덱스가 PeriodIndex여야 합니다"
     assert result.index.freqstr == "M", "주기가 M(월별)이어야 합니다"
-    assert len(result) > 0, "데이터가 비어있으면 안 됩니다"
+    assert len(result) == 24, f"24개월 데이터여야 합니다 (실제: {len(result)})"
 
 
 # --------------------------------------------------------------------------

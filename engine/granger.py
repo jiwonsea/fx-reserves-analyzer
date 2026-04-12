@@ -1,4 +1,4 @@
-"""Granger 인과성 검정 — 양방향, lag 1~6개월."""
+"""Granger 인과성 검정 — 양방향, lag 1~12개월."""
 
 import contextlib
 import io
