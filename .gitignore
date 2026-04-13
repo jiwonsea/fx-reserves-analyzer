@@ -18,3 +18,7 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Cover letters / personal docs (prevent accidental commit)
+coverletter*.md
+*coverletter*.md
