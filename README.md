@@ -1,6 +1,6 @@
 # fx-reserves-analyzer
 
-한국 외환보유고(BOK ECOS)와 원/달러 환율(yfinance)의 관계를 계량분석하는 Python 도구.
+한국 외환보유고와 원/달러 환율(모두 BOK ECOS API)의 관계를 계량분석하는 Python 도구.
 
 한국은행 국제·금융부서 인턴십 포트폴리오 프로젝트.
 
@@ -45,7 +45,7 @@ cp .env.example .env
 ### 2. 실행
 
 ```bash
-cd F:\dev\Portfolio\fx-reserves-analyzer
+cd fx-reserves-analyzer
 python main.py
 ```
 
@@ -72,7 +72,7 @@ fx-reserves-analyzer/
 ├── main.py                   # 메인 진입점
 ├── pipeline/
 │   ├── ecos_collector.py     # BOK ECOS API (외환보유고)
-│   └── fx_collector.py       # yfinance (USDKRW=X)
+│   └── fx_collector.py       # BOK ECOS API (원/달러 월말 매매기준율)
 ├── engine/
 │   ├── unit_root.py          # ADF 단위근 검정
 │   ├── correlation.py        # 피어슨 상관계수
@@ -103,5 +103,5 @@ fx-reserves-analyzer/
 ## 의존성
 
 - pandas ≥ 2.2, numpy, statsmodels ≥ 0.14
-- yfinance, scipy, matplotlib, openpyxl
+- scipy, matplotlib, openpyxl
 - python-dotenv, requests
